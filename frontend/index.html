@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RickMortyAPI</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <h1>Rick & Morty</h1>
+    <p>Puedes realizar la búsqueda de dos formas: </p>
+    <p> - Por nombre <i>Alexander</i> y mostrará todos personajes que coincidan con ese valor. </p>
+    <p> - Por ID <i>2</i> y mostrará el personaje que corresponda. </p>
+    <label for="nombrePersonaje">Nombre del personaje: </label>
+    <input type="text" id="nombrePersonaje" placeholder=""/>
+    <button onclick=" getInfoPersonaje()">Obtener Personaje</button>
+    <br>
+    <div id="personajeInfo">
+        <ul id="listaPersonajes"></ul>
+    </div>
+    <script src="./js/script.js"></script>
+</body>
+</html>

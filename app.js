@@ -1,7 +1,9 @@
 const express = require('express');
 const axios = require('axios');
+const cors = require('cors');
 const app = express();
 
+app.use(cors());
 
 const url = `https://rickandmortyapi.com/api/character`;
 
@@ -14,8 +16,10 @@ app.get('/characters', async (req, res) => {
             console.log( dataInfo.length);
             console.log('dataInfo: ', dataInfo);
             res.status(200).json({cantidad: dataInfo.length, personajes: dataInfo});
-        });
-        
+        })
+        .catch(error => {
+            res.status(404).json({error: 'No hemos podido realizar la búsqueda. Revisa tu consulta.'});
+        });   
 
     } 
     catch (error) {
@@ -25,32 +29,37 @@ app.get('/characters', async (req, res) => {
 });
 
 // si indicas un nombre, buscará todos los pesonajes que contenga dicho nombre
+// Ejemplo: http://localhost:3000/characters/Rick%20Sanchez
 // si indicas un número, buscará el personaje cuyo ID coincida con dicho número
+// Ejemplo: http://localhost:3000/characters/2
 app.get('/characters/:personaje', async (req, res) => {
   
     const personaje = req.params.personaje;
-    console.log( personaje);
-    console.log(typeof personaje);
+    //console.log( personaje);
+    //console.log(typeof personaje);
 
     try {
         const esId = Number.parseInt(personaje);
-    
+
         if (!Number.isNaN(esId)) {
-            // si es un número lanzamos la consulta por id de personaje https://rickandmortyapi.com/api/character/1
+             // si es un número lanzamos la consulta por id de personaje https://rickandmortyapi.com/api/character/1
             const urlPersonaje = `${url}/${personaje}`;
             getPersonaje(urlPersonaje).then(dataInfo => { 
-                console.log('dataInfo: ', dataInfo);
                 res.status(200).json(dataInfo);
+            })
+            .catch(error => {
+                res.status(404).json({error: 'No hemos podido realizar la búsqueda. Revisa tu consulta.'});
             });
-       
+
         }
         else {
             // si no suponemos que es nombre y hacemos la consulta por nombre de personaje https://rickandmortyapi.com/api/character/?name=rick
             const urlPersonaje = `${url}/?name=${personaje}`;
             getPersonajesAll(urlPersonaje).then(dataInfo => { 
-                console.log('dataInfo: ', dataInfo);
-                console.log( dataInfo.length);
-                res.status(200).json({cantidad: dataInfo.length, personajes: dataInfo});
+                res.status(200).json({personajes: dataInfo});
+             })
+            .catch(error => {
+                res.status(404).json({error: 'No hemos podido realizar la búsqueda. Revisa tu consulta.'});
             });
        
         }
@@ -109,7 +118,7 @@ app.get('/characters/:personaje', async (req, res) => {
         }
     }
     
-    console.log(arrPersonajes.length);
+    
     return arrPersonajes;  
 }
 
@@ -117,3 +126,4 @@ const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Express está escuchando en el puerto ${PORT}`);
   });
+
