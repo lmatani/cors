@@ -35,16 +35,18 @@ app.get('/characters', async (req, res) => {
 app.get('/characters/:personaje', async (req, res) => {
   
     const personaje = req.params.personaje;
-    //console.log( personaje);
-    //console.log(typeof personaje);
+    console.log( personaje);
+    console.log(typeof personaje);
 
     try {
         const esId = Number.parseInt(personaje);
-
+        
         if (!Number.isNaN(esId)) {
              // si es un número lanzamos la consulta por id de personaje https://rickandmortyapi.com/api/character/1
             const urlPersonaje = `${url}/${personaje}`;
-            getPersonaje(urlPersonaje).then(dataInfo => { 
+            console.log(urlPersonaje);
+            getPersonaje(urlPersonaje).then(dataInfo => {
+                console.log(dataInfo); 
                 res.status(200).json(dataInfo);
             })
             .catch(error => {
@@ -56,6 +58,7 @@ app.get('/characters/:personaje', async (req, res) => {
             // si no suponemos que es nombre y hacemos la consulta por nombre de personaje https://rickandmortyapi.com/api/character/?name=rick
             const urlPersonaje = `${url}/?name=${personaje}`;
             getPersonajesAll(urlPersonaje).then(dataInfo => { 
+                console.log(dataInfo); 
                 res.status(200).json({personajes: dataInfo});
              })
             .catch(error => {
